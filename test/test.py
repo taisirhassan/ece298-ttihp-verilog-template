@@ -47,11 +47,8 @@ async def test_project(dut):
     # Setup load value and signal before clock edge
     dut.uio_in.value = 0x42         # Base count = 0x42 (66 decimal)
     dut.ui_in.value = 1             # Set load = 1
-    
-    # Wait for rising edge to capture the load 
-    await RisingEdge(dut.clk)
-    
-    # Check immediately after load
+    await ClockCycles(dut.clk, 1)   # Hold load high for a full clock
+    dut.ui_in.value = 0             # Clear load
     count_after_load = int(dut.uo_out.value)
     dut._log.info(f"Count after load: {count_after_load}")
     assert count_after_load == 0x42, f"Expected count=0x42, got {count_after_load}"
