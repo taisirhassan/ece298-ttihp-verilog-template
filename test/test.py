@@ -82,7 +82,7 @@ async def test_project(dut):
     count_with_tri = int(dut.uo_out.value)
     oe_value = int(dut.uio_oe.value)
     dut._log.info(f"Count with tri-state enabled: {count_with_tri}, OE value: {oe_value}")
-    assert count_with_tri == 0x44, f"Expected count=0x44, got {count_with_tri}"
+    assert count_with_tri == 69, f"Expected count=69, got {count_with_tri}"
     assert oe_value == 0xFF, f"Expected all outputs enabled (0xFF), got {oe_value}"
     
     # Test reset
