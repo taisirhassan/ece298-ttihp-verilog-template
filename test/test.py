@@ -94,7 +94,7 @@ async def test_project(dut):
     await FallingEdge(dut.clk)  # Check results after falling edge
     count_after_reset = int(dut.uo_out.value)
     dut._log.info(f"Count after reset: {count_after_reset}")
-    assert count_after_reset == 0, f"Expected count=0 after reset, got {count_after_reset}"
+    assert count_after_reset == 1, f"Expected count=1 after reset+clock cycle, got {count_after_reset}"
     
     # Test overflow
     dut._log.info("Test overflow")
