@@ -42,11 +42,16 @@ async def test_project(dut):
     dut._log.info(f"Count after 2 cycles: {count2}")
     assert count2 == 2, f"Expected count=2, got {count2}"
     
-    # Test loading value
+    # Test loading value - make sure data is loaded at the correct time
     dut._log.info("Test loading value")
+    # Setup load value and signal before clock edge
     dut.uio_in.value = 0x42         # Base count = 0x42 (66 decimal)
     dut.ui_in.value = 1             # Set load = 1
-    await ClockCycles(dut.clk, 1)
+    
+    # Wait for rising edge to capture the load 
+    await RisingEdge(dut.clk)
+    
+    # Check immediately after load
     count_after_load = int(dut.uo_out.value)
     dut._log.info(f"Count after load: {count_after_load}")
     assert count_after_load == 0x42, f"Expected count=0x42, got {count_after_load}"
@@ -82,7 +87,7 @@ async def test_project(dut):
     dut._log.info("Test overflow")
     dut.uio_in.value = 0xFF         # Base count = 0xFF (255 decimal)
     dut.ui_in.value = 1             # Set load = 1
-    await ClockCycles(dut.clk, 1)
+    await RisingEdge(dut.clk)
     count_max = int(dut.uo_out.value)
     dut._log.info(f"Count at max: {count_max}")
     assert count_max == 0xFF, f"Expected count=0xFF, got {count_max}"
